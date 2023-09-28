@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { styled } from "styled-components";
 import LoadingScreen from "../components/loading-screen";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -45,6 +48,7 @@ const Error = styled.span`
 `;
 
 export default function CreateAccount() {
+  const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -62,12 +66,28 @@ export default function CreateAccount() {
       setPassword(value);
     }
   };
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isLoading || name === "" || email === "" || password === "") {
+      return;
+    }
     try {
+      setLoading(true);
       // 사용자 프로필
       // 사용자 아이디 ETC
       // 홈페이지리 다이렉트
+      const credentials = await createUserWithEmailAndPassword(
+        // 계정이생성되면 자동으로 로그인이 된다
+        auth,
+        email,
+        password
+      );
+      console.log(credentials.user); // 유저 정보 확인
+      await updateProfile(credentials.user, {
+        // 유저 정보 제작
+        displayName: name,
+      });
+      navigate("/"); // 리다이렉트
     } catch (e) {
       // 에러 설정
     } finally {
@@ -77,7 +97,7 @@ export default function CreateAccount() {
   };
   return (
     <Wrapper>
-      <Title>Log In 𝕏</Title>
+      <Title>Join 𝕏</Title>
       <Title>지금 가입하세요.</Title>
       <Form onSubmit={onSubmit}>
         <Input
@@ -106,7 +126,7 @@ export default function CreateAccount() {
         />
         <Input
           type="submit"
-          value={isLoading ? LoadingScreen : "Create Account"}
+          value={isLoading ? "Loding..." : "Create Account"}
         />
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
