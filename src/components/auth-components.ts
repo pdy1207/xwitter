@@ -32,9 +32,11 @@ export const Input = styled.input`
   transition: all 0.5s ease;
   &[type="submit"] {
     cursor: pointer;
+    background-color: #1d9bf0;
+    color: white;
     &:hover {
       opacity: 0.8;
-      background-color: #222;
+      background-color: #1d9bf0;
       color: #eee;
     }
   }

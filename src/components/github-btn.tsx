@@ -16,6 +16,35 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  color: white;
+  /* 무지개 색상 애니메이션 */
+  background-image: linear-gradient(
+    45deg,
+    #f06,
+    #ff6a00,
+    #ff3f3f,
+    #c96af0,
+    #3fcaff,
+    #3fffaf
+  );
+  background-size: 600% 100%;
+  transition: background-position 0.5s;
+
+  &:hover {
+    animation: rainbow 3s linear infinite;
+  }
+
+  @keyframes rainbow {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 `;
 
 const Logo = styled.img`
@@ -35,7 +64,7 @@ export default function GithubButton() {
   };
   return (
     <Button onClick={onClick}>
-      <Logo src="/github-logo.svg" />
+      <Logo src="/github-logo.png" />
       Continue with Github
     </Button>
   );
