@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyArwAZN0Q1oI056Agbt_W7JPNRd4QilOUE",
@@ -11,3 +12,6 @@ const firebaseConfig = {
 
 // Firebase initialize
 const app = initializeApp(firebaseConfig);
+
+// Firebase Email / Pw 확인
+export const auth = getAuth(app);
