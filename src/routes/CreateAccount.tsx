@@ -1,26 +1,14 @@
 import { useState } from "react";
-import { styled } from "styled-components";
-import LoadingScreen from "../components/loading-screen";
-import { Link, useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { Form, Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import { FirebaseError } from "firebase/app";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import {
-  Form,
-  Input,
-  Switcher,
-  Title,
-  Wrapper,
-  Error,
-} from "../components/auth-components";
-
-const errors = {
-  "auth/email-already-in-use": "이미 존재하는 이메일 입니다.",
-};
+import { Input, Title, Wrapper } from "../components/auth-components";
 
 export default function CreateAccount() {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,7 +16,9 @@ export default function CreateAccount() {
     const {
       target: { name, value },
     } = e;
-    if (name === "email") {
+    if (name === "name") {
+      setName(value);
+    } else if (name === "email") {
       setEmail(value);
     } else if (name === "password") {
       setPassword(value);
@@ -37,13 +27,25 @@ export default function CreateAccount() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    if (isLoading || email === "" || password === "") {
+    if (isLoading || name === "" || email === "" || password === "") {
       return;
     }
     try {
       setLoading(true);
-
-      await signInWithEmailAndPassword(auth, email, password); // 로그인 한 사람은 누군가?
+      // 사용자 프로필
+      // 사용자 아이디 ETC
+      // 홈페이지리 다이렉트
+      const credentials = await createUserWithEmailAndPassword(
+        // 계정이생성되면 자동으로 로그인이 된다
+        auth,
+        email,
+        password
+      );
+      console.log(credentials.user); // 유저 정보 확인
+      await updateProfile(credentials.user, {
+        // 유저 정보 제작
+        displayName: name,
+      });
       navigate("/"); // 리다이렉트
     } catch (e) {
       // 에러 설정
@@ -63,9 +65,17 @@ export default function CreateAccount() {
   };
   return (
     <Wrapper>
-      <Title>Log into 𝕏</Title>
-      <Title>일어나고 있는 일</Title>
+      <Title>Join 𝕏</Title>
+      <Title>지금 가입하세요.</Title>
       <Form onSubmit={onSubmit}>
+        <Input
+          onChange={onChange}
+          name="name"
+          value={name}
+          placeholder="Name"
+          type="text"
+          required
+        />
         <Input
           onChange={onChange}
           name="email"
@@ -82,12 +92,15 @@ export default function CreateAccount() {
           type="password"
           required
         />
-        <Input type="submit" value={isLoading ? "Loding..." : "Log in"} />
+        <Input
+          type="submit"
+          value={isLoading ? "Loding..." : "Create Account"}
+        />
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
       <Switcher>
-        계정이 없으신가요?
-        <Link to="/create-account">Create one &rarr;</Link>
+        이미 계정이 있으세요?
+        <Link to="/login">Log in &rarr;</Link>
       </Switcher>
     </Wrapper>
   );
