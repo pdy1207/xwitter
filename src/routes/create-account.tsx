@@ -1,16 +1,17 @@
 import { useState } from "react";
-import LoadingScreen from "../components/loading-screen";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { Form, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import { FirebaseError } from "firebase/app";
 import {
+  Form,
   Input,
   Switcher,
   Title,
   Wrapper,
   Error,
 } from "../components/auth-components";
+import GithubButton from "../components/github-btn";
 
 const errors = {
   "auth/email-already-in-use": "이미 존재하는 이메일 입니다.",
@@ -113,6 +114,7 @@ export default function CreateAccount() {
         이미 계정이 있으세요?
         <Link to="/login">Log in &rarr;</Link>
       </Switcher>
+      <GithubButton />
     </Wrapper>
   );
 }
