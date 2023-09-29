@@ -1,5 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyArwAZN0Q1oI056Agbt_W7JPNRd4QilOUE",
@@ -15,3 +17,8 @@ const app = initializeApp(firebaseConfig);
 
 // Firebase Email / Pw 확인
 export const auth = getAuth(app);
+
+// DB 스토리지에 관한 코드
+export const storage = getStorage(app);
+
+export const db = getFirestore(app);

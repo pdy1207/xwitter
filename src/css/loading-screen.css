@@ -13,7 +13,7 @@
   fill: none;
   stroke-dasharray: 500;
   stroke-dashoffset: 500;
-  animation: stroke 2.5s linear infinite;
+  animation: stroke 0.5s linear infinite;
 }
 
 @keyframes stroke {
