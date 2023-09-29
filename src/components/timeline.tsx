@@ -1,8 +1,16 @@
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { db } from "../firebase";
 import Tweet from "./tweet";
+import { Unsubscribe } from "firebase/auth";
 
 export interface ITweet {
   id: string;
@@ -21,27 +29,48 @@ const Wrapper = styled.div`
 
 export default function Timeline() {
   const [tweets, setTweet] = useState<ITweet[]>([]);
-  const fetchTweets = async () => {
-    const tweetsQuery = query(
-      collection(db, "xwitter"),
-      orderBy("createdAt", "desc")
-    );
-    const spanshot = await getDocs(tweetsQuery);
-    const tweets = spanshot.docs.map((doc) => {
-      const { tweet, createdAt, userId, username, photo } = doc.data();
-      return {
-        tweet,
-        createdAt,
-        userId,
-        username,
-        photo,
-        id: doc.id,
-      };
-    });
-    setTweet(tweets);
-  };
+
   useEffect(() => {
+    let unsubscribe: Unsubscribe | null = null;
+    const fetchTweets = async () => {
+      const tweetsQuery = query(
+        collection(db, "xwitter"),
+        orderBy("createdAt", "desc"),
+        limit(25)
+      ); // 쿼리 생성
+      /* const spanshot = await getDocs(tweetsQuery);
+      const tweets = spanshot.docs.map((doc) => {
+        const { tweet, createdAt, userId, username, photo } = doc.data();
+        return {
+          tweet,
+          createdAt,
+          userId,
+          username,
+          photo,
+          id: doc.id,
+        };
+      }); */
+      unsubscribe = await onSnapshot(tweetsQuery, (snapshot) => {
+        const tweets = snapshot.docs.map((doc) => {
+          // DB의 실시간업데이트를 위한 코드
+          const { tweet, createdAt, userId, username, photo } = doc.data();
+          return {
+            tweet,
+            createdAt,
+            userId,
+            username,
+            photo,
+            id: doc.id,
+          };
+        });
+        setTweet(tweets);
+      });
+    };
     fetchTweets();
+    return () => {
+      unsubscribe && unsubscribe();
+      // 즉, profile파일이면 타임라인을 볼필요가 없잖음!
+    };
   }, []);
   return (
     <Wrapper>
