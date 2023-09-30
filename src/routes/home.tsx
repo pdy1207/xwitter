@@ -2,12 +2,12 @@ import { styled } from "styled-components";
 import PostTweetForm from "../components/post-tweet-form";
 import { auth } from "../firebase";
 import Timeline from "../components/timeline";
-import "../css/scroll.css";
 
 const Wrapper = styled.div`
   display: grid;
   gap: 50px;
   grid-template-rows: 1fr 5fr;
+  overflow-y: scroll;
 `;
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
   //   auth.signOut();
   // };
   return (
-    <Wrapper>
+    <Wrapper className="timeline">
       <PostTweetForm />
       <Timeline />
     </Wrapper>

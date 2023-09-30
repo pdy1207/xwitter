@@ -88,10 +88,8 @@ export default function PostTweetForm() {
       }); // 해당 저장하는것을 변수로 담음
       if (file && file.size < 1024 ** 2) {
         // 파일 사이즈 제한
-        const locationRef = ref(
-          storage,
-          `xwitter/${user.uid}-${user.displayName}/${doc.id}`
-        ); // 해당 경로로서 저장을함
+        const locationRef = ref(storage, `xwitter/${user.uid}/${doc.id}`); // 해당 경로로서 저장을함
+        // root / uid / 폴더id
         const result = await uploadBytes(locationRef, file);
         const url = await getDownloadURL(result.ref);
         await updateDoc(doc, {

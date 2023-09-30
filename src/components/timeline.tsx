@@ -1,6 +1,6 @@
 import {
   collection,
-  getDocs,
+  // getDocs,
   limit,
   onSnapshot,
   orderBy,
@@ -9,8 +9,9 @@ import {
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { db } from "../firebase";
-import Tweet from "./tweet";
 import { Unsubscribe } from "firebase/auth";
+import Tweet from "./tweet";
+import "../css/scroll.css";
 
 export interface ITweet {
   id: string;
@@ -25,6 +26,7 @@ const Wrapper = styled.div`
   display: flex;
   gap: 10px;
   flex-direction: column;
+  overflow-y: scroll;
 `;
 
 export default function Timeline() {
@@ -73,7 +75,7 @@ export default function Timeline() {
     };
   }, []);
   return (
-    <Wrapper>
+    <Wrapper className="timeline">
       {tweets.map((tweet) => (
         <Tweet key={tweet.id} {...tweet} />
       ))}
