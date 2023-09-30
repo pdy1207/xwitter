@@ -13,9 +13,9 @@ import {
 } from "../components/auth-components";
 import GithubButton from "../components/github-btn";
 
-const errors = {
-  "auth/email-already-in-use": "이미 존재하는 이메일 입니다.",
-};
+// const errors = {
+//   "auth/email-already-in-use": "이미 존재하는 이메일 입니다.",
+// };
 
 export default function CreateAccount() {
   const navigate = useNavigate();

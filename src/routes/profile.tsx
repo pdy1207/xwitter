@@ -137,8 +137,8 @@ export default function profile() {
   return (
     <Wrapper className="timeline">
       <AvatarUpload htmlFor="avatar">
-        {Boolean(avatar) ? (
-          <AvatarImg src={avatar} />
+        {avatar ? (
+          <AvatarImg src={avatar} alt="avatar" />
         ) : (
           <svg
             xmlns="http://www.w3.org/2000/svg"

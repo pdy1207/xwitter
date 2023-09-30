@@ -1,4 +1,3 @@
-import { styled } from "styled-components";
 import "../css/loading-screen.css";
 
 export default function LoadingScreen() {
